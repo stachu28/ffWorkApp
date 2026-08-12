@@ -24,7 +24,7 @@ public class Money {
     }
 
     public Money subtract(Money other) {
-        if (other.amount.compareTo(amount) < 0) {
+        if (other.amount.compareTo(amount) > 0) {
             throw new IllegalArgumentException("Desired operation failed due to unsufficient funds!");
         }
         return new Money(amount.subtract(other.amount));
@@ -40,7 +40,7 @@ public class Money {
 
     public Money applyDiscount(BigDecimal discountPercent) {
         if (discountPercent.compareTo(BigDecimal.ZERO) < 0 || discountPercent.compareTo(BigDecimal.valueOf(100)) > 0) {
-            throw new IllegalArgumentException("Discount must be between 0 - 100");
+            throw new IllegalArgumentException("Illegal rate! Discount must be between 0 - 100!");
         }
         BigDecimal discount = discountPercent.divide(BigDecimal.valueOf(100)).multiply(amount);
         return new Money(amount.subtract(discount));
