@@ -10,8 +10,7 @@ import java.time.format.DateTimeParseException;
 // strefy czasowej ale z opisu zadania wnioskuje, że nie jest to wymagane.
 
 public final class TimeUtils {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private TimeUtils() {
     }
@@ -23,8 +22,7 @@ public final class TimeUtils {
         try {
             return LocalDateTime.parse(time.trim(), DATE_TIME_FORMATTER);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Illegal time value entered!\n" +
-                    "entered: " + time.trim() + ", expected: " + DATE_TIME_FORMATTER);
+            throw new IllegalArgumentException("Illegal time value entered!\n" + "entered: " + time.trim() + ", expected format : yyyy-MM-dd HH:mm");
         }
     }
 
@@ -38,5 +36,27 @@ public final class TimeUtils {
         long minutes = timeBetweenInMinutes % 60;
 
         return hours + "h, " + minutes + "min.";
+    }
+
+    public static record TimeRange(LocalDateTime start, LocalDateTime end) {
+        public TimeRange {
+            validateRange(start, end);
+        }
+
+        private void validateRange(LocalDateTime start, LocalDateTime end) {
+            if (start == null || end == null) {
+                throw new IllegalArgumentException("Time ranges cannot be left empty!");
+            }
+            if (!start.isBefore(end)) {
+                throw new IllegalArgumentException("Ending time cannot be before starting time!");
+            }
+        }
+    }
+
+    public static boolean overlaps(TimeRange first, TimeRange second) {
+        if (first == null || second == null) {
+            throw new IllegalArgumentException("Time range cannot be null!");
+        }
+        return first.start().isBefore(second.end()) && first.end().isAfter(second.start());
     }
 }
