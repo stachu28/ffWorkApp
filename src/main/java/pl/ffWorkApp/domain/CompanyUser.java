@@ -1,6 +1,6 @@
 package main.java.pl.ffWorkApp.domain;
 
-public class CompanyUser extends User{
+public class CompanyUser extends User {
     private String companyName;
     private String taxId;
 
@@ -8,5 +8,11 @@ public class CompanyUser extends User{
         super(email, displayName, phoneNumber);
         this.companyName = companyName;
         this.taxId = taxId;
+    }
+
+    @Override
+    public String toString() {
+        return "User: " + userID + ", name: " + displayName + ", email: " + email + ", phone number: " + phoneNumber +
+                ", company: " + companyName + ", tax ID: " + taxId;
     }
 }
