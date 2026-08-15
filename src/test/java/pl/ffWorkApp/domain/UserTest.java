@@ -15,5 +15,14 @@ public class UserTest {
         CompanyUser companyUser = new CompanyUser("companyuser1@test.com", "Company User 1", "+48 123 456 789",
                 "Company Name", "123456");
         System.out.println(companyUser);
+
+        System.out.println("\n* Email Validator Test *");
+        String wrongEmail = "wrong_email";
+        System.out.println("Incorrect email is: " + wrongEmail);
+        try {
+            companyUser.setEmail(wrongEmail);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

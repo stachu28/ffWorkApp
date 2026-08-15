@@ -19,7 +19,11 @@ abstract public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            this.email = email;
+        } else {
+            throw new IllegalArgumentException("Email Incorrect!");
+        }
     }
 
     public String getDisplayName() {
