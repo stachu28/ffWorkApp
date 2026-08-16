@@ -38,6 +38,10 @@ public final class TimeUtils {
         return hours + "h, " + minutes + "min.";
     }
 
+    public static int durationMinutes(LocalDateTime start, LocalDateTime end) {
+        return Math.toIntExact(Duration.between(start, end).toMinutes());
+    }
+
     public static record TimeRange(LocalDateTime start, LocalDateTime end) {
         public TimeRange {
             validateRange(start, end);
