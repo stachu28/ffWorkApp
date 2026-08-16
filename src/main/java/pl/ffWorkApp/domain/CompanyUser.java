@@ -12,7 +12,7 @@ public class CompanyUser extends User {
 
     @Override
     public String toString() {
-        return "User: " + userID + ", name: " + displayName + ", email: " + email + ", phone number: " + phoneNumber +
+        return "User ID: " + userID + ", name: " + displayName + ", email: " + email + ", phone number: " + phoneNumber +
                 ", company: " + companyName + ", tax ID: " + taxId;
     }
 }
