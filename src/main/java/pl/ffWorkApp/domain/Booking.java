@@ -1,6 +1,7 @@
 package main.java.pl.ffWorkApp.domain;
 
 import main.java.pl.ffWorkApp.money.Money;
+import main.java.pl.ffWorkApp.payment.Payment;
 import main.java.pl.ffWorkApp.time.TimeUtils;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class Booking {
     private final LocalDateTime end;
     private BookingStatus status;
     private Money calculatedPrice;
+    private Payment payment;
 
     public Booking(User user, Resource resource, LocalDateTime start, LocalDateTime end) {
         new TimeUtils.TimeRange(start, end);
@@ -85,5 +87,20 @@ public class Booking {
 
     public void setCalculatedPrice(Money calculatedPrice) {
         this.calculatedPrice = calculatedPrice;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    @Override
+    public String toString() {
+        return "BookingId: " + id + ", user: " + user + ", resource: " + resource + ", start time: " + start
+                + ", end time: " + end + ", booking status: " + status + ", calculated price: " + calculatedPrice
+                + ", payment: " + payment;
     }
 }

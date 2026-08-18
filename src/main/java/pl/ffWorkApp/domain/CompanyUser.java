@@ -10,6 +10,14 @@ public class CompanyUser extends User {
         this.taxId = taxId;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public String getTaxId() {
+        return taxId;
+    }
+
     @Override
     public String toString() {
         return "User ID: " + userID + ", name: " + displayName + ", email: " + email + ", phone number: " + phoneNumber +
