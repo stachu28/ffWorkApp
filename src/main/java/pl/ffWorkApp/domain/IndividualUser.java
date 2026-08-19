@@ -17,7 +17,7 @@ public class IndividualUser extends User {
 
     @Override
     public String toString() {
-        return "User: " + userID + ", name: " + displayName + ", email: " + email + ", phone number: " + phoneNumber +
+        return "UserID: " + userID + ", name: " + displayName + ", email: " + email + ", phone number: " + phoneNumber +
                 ", student: " + (isStudent ? "yes, student id: " + studentI : "no");
     }
 }
