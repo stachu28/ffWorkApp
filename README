@@ -235,7 +235,8 @@ Prosty wzorzec repozytorium (dane trzymane w pamięci). Możesz użyć tablic `[
   }`
 
 **Implementacje:**
-`InMemoryUserRepository`, `InMemoryResourceRepository`, `InMemoryBookingRepository` — trzymają dane w kolekcjach/tablicach Javy.
+`InMemoryUserRepository`, `InMemoryResourceRepository`, `InMemoryBookingRepository` — trzymają dane w
+kolekcjach/tablicach Javy.
 
 ---
 
@@ -243,18 +244,21 @@ Prosty wzorzec repozytorium (dane trzymane w pamięci). Możesz użyć tablic `[
 
 #### `class BookingService`
 
-- **Zależności:** repozytoria (`UserRepository`, `ResourceRepository`, `BookingRepository`) + aktualna `PricingPolicy` (np. `StandardPricing` albo `HappyHoursPricing`).
+- **Zależności:** repozytoria (`UserRepository`, `ResourceRepository`, `BookingRepository`)
++ aktualna `PricingPolicy` (np. `StandardPricing` albo `HappyHoursPricing`).
 
 - **Metody (overloading):**
     - `Booking book(User u, Resource r, <Czas> start, <Czas> end)`
-    - `Booking book(User u, Resource r, <Czas> start, int durationMinutes)` — deleguje do wersji z `end`, wyliczając koniec jako `start.plusMinutes(durationMinutes)`.
+    - `Booking book(User u, Resource r, <Czas> start, int durationMinutes)` —
+    deleguje do wersji z `end`, wyliczając koniec jako `start.plusMinutes(durationMinutes)`.
 
   > `<Czas>` to typ Twojej wybranej klasy czasu (np. `LocalDateTime`).
 
 - **Algorytm `book` (wersja podstawowa):**
     1. Waliduj czasy (`end > start`).
     2. Sprawdź kolizje dla zasobu:
-        - dla `Room`/`Desk` — żadna rezerwacja w stanie `CONFIRMED`/`PENDING` nie może się **nakładać** (zakresy `[start, end)`):
+        - dla `Room`/`Desk` — żadna rezerwacja w stanie `CONFIRMED`/`PENDING` nie może się **nakładać**
+        (zakresy `[start, end)`):
             - nakładanie: `startA < endB && startB < endA`.
         - dla `Device` — dozwolonych jest `quantity` równoległych rezerwacji (zlicz nakładające się).
     3. Utwórz `Booking` ze statusem `PENDING` i policz cenę:
@@ -266,13 +270,16 @@ Prosty wzorzec repozytorium (dane trzymane w pamięci). Możesz użyć tablic `[
     - `cancel(String bookingId)` — zmiana statusu na `CANCELLED`, jeśli to dozwolone,
     - `complete(String bookingId)` — zmiana statusu na `COMPLETED`,
     - `list(...)` — zwraca listę rezerwacji.
-        - **Filtry po użytkowniku/zasobie/statusie mogą być zrobione w prosty sposób (np. osobne metody lub parametry).**
+        - **Filtry po użytkowniku/zasobie/statusie mogą być zrobione w prosty sposób
+        (np. osobne metody lub parametry).**
 
 #### `class PaymentService`
 
-- `Payment pay(String bookingId, String cardLast4)` — tworzy `CardPayment`, woła `capture()`, przypina płatność do `Booking` i ją zwraca.
+- `Payment pay(String bookingId, String cardLast4)` — tworzy `CardPayment`, woła `capture()`,
+przypina płatność do `Booking` i ją zwraca.
 
-> ⭐ **Opcjonalne (zaawansowane):** obsługa portfela (`WalletPayment`), zwrotów (`refund`) i dodatkowych walidacji — w sekcji rozszerzeń.
+> ⭐ **Opcjonalne (zaawansowane):** obsługa portfela (`WalletPayment`), zwrotów (`refund`) i
+dodatkowych walidacji — w sekcji rozszerzeń.
 
 #### `class BillingService implements Billable`
 
@@ -455,5 +462,3 @@ W tej sekcji są elementy, które **podnoszą poziom trudności**, ale nie są w
 5. Dodatkowe filtry w CLI (`LIST_BOOKINGS` z parametrami, `LIST_RESOURCES TYPE=...`).
 
 ---
-
-Powodzenia! 💪
