@@ -1,9 +1,6 @@
 package main.java.pl.ffWorkApp.service;
 
-import main.java.pl.ffWorkApp.domain.Booking;
-import main.java.pl.ffWorkApp.domain.BookingStatus;
-import main.java.pl.ffWorkApp.domain.Resource;
-import main.java.pl.ffWorkApp.domain.User;
+import main.java.pl.ffWorkApp.domain.*;
 import main.java.pl.ffWorkApp.pricing.PricingPolicy;
 import main.java.pl.ffWorkApp.repository.BookingRepository;
 import main.java.pl.ffWorkApp.repository.ResourceRepository;
@@ -62,6 +59,7 @@ public class BookingService {
     private boolean isResourceAvailable(Resource resource, LocalDateTime start, LocalDateTime end) {
         List<Booking> bookings = bookingRepository.findByResource(resource);
         TimeUtils.TimeRange requestedBookingRange = new TimeUtils.TimeRange(start, end);
+        int overlappingBookings = 0;
 
         for (Booking booking : bookings) {
             if (booking.getStatus() != BookingStatus.PENDING && booking.getStatus() != BookingStatus.CONFIRMED) {
@@ -69,10 +67,14 @@ public class BookingService {
             }
             TimeUtils.TimeRange existingBookingRange = new TimeUtils.TimeRange(booking.getStart(), booking.getEnd());
             if (TimeUtils.overlaps(requestedBookingRange, existingBookingRange)) {
-                return false;
+                overlappingBookings++;
             }
         }
-        return true;
+        if (resource instanceof Device device) {
+            return overlappingBookings < device.getQuantity();
+        }
+
+        return overlappingBookings == 0;
     }
 
     public void confirm(String bookingId) {
