@@ -2,7 +2,7 @@ package test.java.pl.ffWorkApp.repository;
 
 import main.java.pl.ffWorkApp.domain.IndividualUser;
 import main.java.pl.ffWorkApp.domain.User;
-import main.java.pl.ffWorkApp.repository.InMemoryUserRepository;
+import main.java.pl.ffWorkApp.repository.inmemory.InMemoryUserRepository;
 
 public class UserRepositoryTest {
     static void main(String[] args) {
@@ -10,8 +10,8 @@ public class UserRepositoryTest {
         IndividualUser testUser = new IndividualUser("test@user.com", "John McAfee", "+48 123 456 789");
         testRepository.add(testUser);
 
-        System.out.println("* Find By Email Test *");
-        System.out.println(testRepository.findByEmail("test@user.com"));
+        System.out.println("\n* Find By Email Test *");
+        System.out.println(testRepository.findByEmail("test@user.com").orElse(testUser));
         System.out.println(testRepository.findByEmail("wrong@email.adress"));
 
         System.out.println("\n* Find All Test *");

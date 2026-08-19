@@ -4,7 +4,7 @@ import main.java.pl.ffWorkApp.domain.Desk;
 import main.java.pl.ffWorkApp.domain.DeskType;
 import main.java.pl.ffWorkApp.domain.Resource;
 import main.java.pl.ffWorkApp.domain.Room;
-import main.java.pl.ffWorkApp.repository.InMemoryResourceRepository;
+import main.java.pl.ffWorkApp.repository.inmemory.InMemoryResourceRepository;
 
 import java.util.Set;
 
@@ -16,10 +16,9 @@ public class ResourceRepositoryTest {
         testRepository.add(testRoom);
         testRepository.add(testDesk);
 
-        System.out.println("* Find By Name Test *");
-        System.out.println(testRepository.findByName("Room 123"));
+        System.out.println("\n* Find By Name Test *");
+        System.out.println(testRepository.findByName("Room 123").orElse(testRoom));
         System.out.println(testRepository.findByName("Room 321"));
-        System.out.println(testRoom.describe());
 
         System.out.println("\n* Find All Test *");
         for (Resource resource : testRepository.findAll()) {

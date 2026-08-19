@@ -1,7 +1,7 @@
 package test.java.pl.ffWorkApp.repository;
 
 import main.java.pl.ffWorkApp.domain.*;
-import main.java.pl.ffWorkApp.repository.InMemoryBookingRepository;
+import main.java.pl.ffWorkApp.repository.inmemory.InMemoryBookingRepository;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -14,8 +14,8 @@ public class BookingRepositoryTest {
         Booking testBooking = new Booking(testUser, testRoom, LocalDateTime.of(2026, 1, 1, 12, 0),
                 LocalDateTime.of(2026, 1, 1, 13, 0));
         testRepository.add(testBooking);
-        System.out.println("* Find By BookingID Test *");
-        System.out.println(testRepository.findById(testBooking.getId()));
+        System.out.println("\n* Find By BookingID Test *");
+        System.out.println(testRepository.findById(testBooking.getId()).orElse(testBooking));
 
         System.out.println("\n* Find by Resource Test *");
         for (Booking booking : testRepository.findByResource(testRoom)) {

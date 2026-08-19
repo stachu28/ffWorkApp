@@ -1,6 +1,7 @@
-package main.java.pl.ffWorkApp.repository;
+package main.java.pl.ffWorkApp.repository.inmemory;
 
 import main.java.pl.ffWorkApp.domain.User;
+import main.java.pl.ffWorkApp.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
