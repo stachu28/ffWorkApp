@@ -22,7 +22,7 @@ public class BookingServiceTest {
 
         BookingService testBookingService = new BookingService(testUserRepository, testResourceRepository, testBookingRepository, new StandardPricing());
 
-        User user = new main.java.pl.ffWorkApp.domain.IndividualUser("test@user.com", "Anna Nowak", "+48 222 333 444");
+        User user = new main.java.pl.ffWorkApp.domain.IndividualUser("test@user.com", "Anna Nowak");
 
         Room room = new Room("Test Room", Money.of("80"), 12, Set.of("projector", "whiteboard"));
 

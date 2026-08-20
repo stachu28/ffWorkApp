@@ -42,7 +42,6 @@ public class Cli {
 
     public void start() {
         boolean running = true;
-
         printOptions();
 
         while (running) {
@@ -61,26 +60,26 @@ public class Cli {
 
     private void printOptions() {
         System.out.println("""
-            
-            === ffWork ===
-            Available commands:
-            
-            ADD_USER
-            LIST_USERS
-            ADD_ROOM
-            ADD_DESK
-            ADD_DEVICE
-            LIST_RESOURCES
-            BOOK
-            CONFIRM
-            CANCEL
-            LIST_BOOKINGS
-            SET_PRICING
-            PAY
-            INVOICE
-            HELP
-            QUIT
-            """);
+                
+                === ffWork ===
+                Available commands:
+                
+                ADD_USER
+                LIST_USERS
+                ADD_ROOM
+                ADD_DESK
+                ADD_DEVICE
+                LIST_RESOURCES
+                BOOK
+                CONFIRM
+                CANCEL
+                LIST_BOOKINGS
+                SET_PRICING
+                PAY
+                INVOICE
+                HELP
+                QUIT
+                """);
     }
 
     private void execute(String command) {
@@ -107,37 +106,37 @@ public class Cli {
 
     private void help() {
         System.out.println("""
-            
-            === ffWork CLI HELP ===
-
-            USERS:
-            ADD_USER INDIVIDUAL <email> <fullName> <phone> [studentId]
-            ADD_USER COMPANY <email> <companyName> <nip>
-            LIST_USERS
-
-            RESOURCES:
-            ADD_ROOM <name> <seats> <hourlyRate>
-            ADD_DESK <name> <hot|fixed> <hourlyRate>
-            ADD_DEVICE <name> <quantity> <hourlyRate>
-            LIST_RESOURCES
-
-            BOOKINGS:
-            BOOK <userEmail> <resourceName> <startIso> <endIso>
-            BOOK <userEmail> <resourceName> <startIso> <durationMinutes>
-            CONFIRM <bookingId>
-            CANCEL <bookingId>
-            LIST_BOOKINGS
-
-            PRICING:
-            SET_PRICING STANDARD|HAPPY_HOURS
-
-            PAYMENTS:
-            PAY <bookingId> CARD <last4>
-            INVOICE <bookingId>
-
-            HELP
-            QUIT
-            """);
+                
+                === ffWork CLI HELP ===
+                
+                USERS:
+                ADD_USER INDIVIDUAL <email> <fullName> <phone> [studentId]
+                ADD_USER COMPANY <email> <companyName> <nip>
+                LIST_USERS
+                
+                RESOURCES:
+                ADD_ROOM <name> <seats> <hourlyRate>
+                ADD_DESK <name> <hot|fixed> <hourlyRate>
+                ADD_DEVICE <name> <quantity> <hourlyRate>
+                LIST_RESOURCES
+                
+                BOOKINGS:
+                BOOK <userEmail> <resourceName> <startIso> <endIso>
+                BOOK <userEmail> <resourceName> <startIso> <durationMinutes>
+                CONFIRM <bookingId>
+                CANCEL <bookingId>
+                LIST_BOOKINGS
+                
+                PRICING:
+                SET_PRICING STANDARD|HAPPY_HOURS
+                
+                PAYMENTS:
+                PAY <bookingId> CARD <last4>
+                INVOICE <bookingId>
+                
+                HELP
+                QUIT
+                """);
     }
 
     private void invoice(String[] parts) {
@@ -239,16 +238,22 @@ public class Cli {
     private void book(String[] parts) {
         try {
             String email = parts[1];
-            String resourceName = parts[2];
+            String resourceName = parts[2].replace("\"", "");
             LocalDateTime start = parser.parseDateTime(parts[3]);
-            LocalDateTime end = parser.parseDateTime(parts[4]);
             User user = userRepository.findByEmail(email).orElseThrow(() ->
                     new IllegalArgumentException("User not found!"));
             Resource resource = resourceRepository.findByName(resourceName).orElseThrow(() ->
                     new IllegalArgumentException("Resource not found!"));
-            Booking booking = new Booking(user, resource, start, end);
-            bookingRepository.add(booking);
-            formatter.ok("You added booking: " + booking.getId() + ", status: " + booking.getStatus());
+            Booking booking;
+            try {
+                int durationMinutes = Integer.parseInt(parts[4]);
+                booking = bookingService.book(user, resource, start, durationMinutes);
+            } catch (NumberFormatException e) {
+                LocalDateTime end = parser.parseDateTime(parts[4]);
+                booking = bookingService.book(user, resource, start, end);
+            }
+            formatter.ok("You added booking: " + booking.getId() + ", status: " + booking.getStatus()
+                    + ", price: " + booking.getCalculatedPrice());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -271,7 +276,7 @@ public class Cli {
             return;
         }
         try {
-            String name = parts[1];
+            String name = parts[1].replace("\"", "");
             int quantity = Integer.parseInt(parts[2]);
             Money customHourlyRate = Money.of(parts[3]);
             if (parts.length == 3) {
@@ -295,7 +300,7 @@ public class Cli {
             return;
         }
         try {
-            String name = parts[1];
+            String name = parts[1].replace("\"", "");
             DeskType type = DeskType.valueOf(parts[2].toUpperCase());
             Money customHourlyRate = Money.of(parts[3]);
             if (parts.length == 3) {
@@ -319,7 +324,7 @@ public class Cli {
             return;
         }
         try {
-            String name = parts[1];
+            String name = parts[1].replace("\"", "");
             int seats = Integer.parseInt(parts[2]);
             Money hourlyRate = Money.of(parts[3]);
             Set<String> equipment = Set.of();
@@ -352,25 +357,33 @@ public class Cli {
         }
         try {
             if (parts[1].equalsIgnoreCase("INDIVIDUAL")) {
+                if (parts.length != 4 && parts.length != 5) {
+                    formatter.error("Usage: ADD_USER INDIVIDUAL <email> <fullName> [studentId]");
+                    return;
+                }
+
                 String email = parts[2];
                 String name = parts[3].replace("_", " ");
-                String phone = parts[4];
+
                 User user;
-                if (parts.length >= 6) {
-                    long studentId = Long.parseLong(parts[5]);
-                    user = new IndividualUser(email, name, phone, studentId);
+
+                if (parts.length == 5) {
+                    long studentId = Long.parseLong(parts[4]);
+                    user = new IndividualUser(email, name, studentId);
                 } else {
-                    user = new IndividualUser(email, name, phone);
+                    user = new IndividualUser(email, name);
                 }
                 userRepository.add(user);
                 formatter.ok("You added new individual user: " + user);
             } else if (parts[1].equalsIgnoreCase("COMPANY")) {
+                if (parts.length != 5) {
+                    formatter.error("Usage: ADD_USER COMPANY <email> <companyName> <nip>");
+                    return;
+                }
                 String email = parts[2];
-                String name = parts[3].replace("_", " ");
-                String phone = parts[4];
-                String companyName = parts[5];
-                String taxId = parts[6];
-                CompanyUser companyUser = new CompanyUser(email, name, phone, companyName, taxId);
+                String companyName = parts[3].replace("\"", "");
+                String taxId = parts[4];
+                CompanyUser companyUser = new CompanyUser(email, null, companyName, taxId);
                 userRepository.add(companyUser);
                 formatter.ok("You added new company user: " + companyUser);
             } else {

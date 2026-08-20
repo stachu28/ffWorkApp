@@ -26,7 +26,7 @@ public class PricingTest {
             }
         };
 
-        User testUser = new IndividualUser("test@email.com", "Test User", "+48 223 334 556");
+        User testUser = new IndividualUser("test@email.com", "Test User");
 
         System.out.println("* Standard Pricing Test *");
         Booking testBooking = new Booking(testUser, testResource, LocalDateTime.of(2026, 8, 16, 14, 0),

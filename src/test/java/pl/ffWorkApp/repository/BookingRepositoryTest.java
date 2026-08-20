@@ -9,7 +9,7 @@ import java.util.Set;
 public class BookingRepositoryTest {
     static void main(String[] args) {
         InMemoryBookingRepository testRepository = new InMemoryBookingRepository();
-        IndividualUser testUser = new IndividualUser("test@user.com", "Steve McQueen", "+48 221 331 458");
+        IndividualUser testUser = new IndividualUser("test@user.com", "Steve McQueen");
         Room testRoom = new Room("Test Room", 4, Set.of("whiteboard"));
         Booking testBooking = new Booking(testUser, testRoom, LocalDateTime.of(2026, 1, 1, 12, 0),
                 LocalDateTime.of(2026, 1, 1, 13, 0));

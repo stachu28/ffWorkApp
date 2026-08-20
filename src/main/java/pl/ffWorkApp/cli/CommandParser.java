@@ -15,7 +15,7 @@ public class CommandParser {
     }
 
     public String[] parse(String command) {
-        return command.trim().split("\\s+");
+        return command.trim().split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
     }
 
     public LocalDateTime parseDateTime(String value) {

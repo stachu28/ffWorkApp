@@ -11,7 +11,7 @@ import java.util.Set;
 public class BookingTest {
     public static void main(String[] args) {
         System.out.println("* Booking Creation Test *");
-        User user = new IndividualUser("test@example.com", "Test User", "+48222333444");
+        User user = new IndividualUser("test@example.com", "Test User");
         Room room = new Room("Test Room", 10, Set.of("projector"));
         LocalDateTime start = LocalDateTime.of(2025, 9, 15, 10, 0);
         LocalDateTime end = LocalDateTime.of(2025, 9, 15, 12, 30);

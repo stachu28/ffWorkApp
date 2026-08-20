@@ -29,7 +29,7 @@ public class PaymentServiceTest {
         BookingService bookingService = new BookingService(userRepository, resourceRepository, bookingRepository,
                 new StandardPricing());
         PaymentService paymentService = new PaymentService(bookingRepository);
-        User user = new IndividualUser("test@user.com", "John Nowak", "+48 222 333 444");
+        User user = new IndividualUser("test@user.com", "John Nowak");
         Room room = new Room("Test Room", Money.of("80"), 12, Set.of("projector", "whiteboard"));
         userRepository.add(user);
         resourceRepository.add(room);

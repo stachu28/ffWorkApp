@@ -7,7 +7,7 @@ import main.java.pl.ffWorkApp.repository.inmemory.InMemoryUserRepository;
 public class UserRepositoryTest {
     static void main(String[] args) {
         InMemoryUserRepository testRepository = new InMemoryUserRepository();
-        IndividualUser testUser = new IndividualUser("test@user.com", "John McAfee", "+48 123 456 789");
+        IndividualUser testUser = new IndividualUser("test@user.com", "John McAfee");
         testRepository.add(testUser);
 
         System.out.println("\n* Find By Email Test *");
@@ -21,7 +21,7 @@ public class UserRepositoryTest {
 
         System.out.println("\n* Duplicate Email Test *");
         try {
-            testRepository.add(new IndividualUser("test@user.com", "Kate McAfee", "+48 100 200 300"));
+            testRepository.add(new IndividualUser("test@user.com", "Kate McAfee"));
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

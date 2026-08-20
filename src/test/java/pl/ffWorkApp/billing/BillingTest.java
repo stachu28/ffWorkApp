@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class BillingTest {
     static void main(String[] args) {
         System.out.println("* Invoice Creation Test *");
-        CompanyUser buyer = new CompanyUser("user@company.com", "John Doe", "+48 600 700 800",
+        CompanyUser buyer = new CompanyUser("user@company.com", "John Doe",
                 "TestCompany Ltd.", "521621721");
         Invoice testInvoice = new Invoice("0001", LocalDateTime.now(), buyer,
                 Money.of("100"), "Test invoice description");
