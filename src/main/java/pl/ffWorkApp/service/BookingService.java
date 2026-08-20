@@ -14,7 +14,7 @@ public class BookingService {
     private final UserRepository userRepository;
     private final ResourceRepository resourceRepository;
     private final BookingRepository bookingRepository;
-    private final PricingPolicy pricingPolicy;
+    private PricingPolicy pricingPolicy;
 
     public BookingService(UserRepository userRepository, ResourceRepository resourceRepository, BookingRepository bookingRepository, PricingPolicy pricingPolicy) {
         this.userRepository = userRepository;
@@ -104,4 +104,10 @@ public class BookingService {
         booking.complete();
     }
 
+    public void setPricingPolicy(PricingPolicy pricingPolicy) {
+        if (pricingPolicy == null) {
+            throw new IllegalArgumentException("Pricing policy cannot be null!");
+        }
+        this.pricingPolicy = pricingPolicy;
+    }
 }

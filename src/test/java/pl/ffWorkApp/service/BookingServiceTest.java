@@ -28,7 +28,7 @@ public class BookingServiceTest {
 
         Desk desk = new Desk("Test Desk", DeskType.HOT, Money.of("25"));
 
-        Device device = new Device("projector", Money.of("40"), 2);
+        Device device = new Device("projector", 2, Money.of("40"));
 
         testUserRepository.add(user);
         testResourceRepository.add(room);
