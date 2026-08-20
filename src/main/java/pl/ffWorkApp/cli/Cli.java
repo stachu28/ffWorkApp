@@ -43,8 +43,9 @@ public class Cli {
     public void start() {
         boolean running = true;
 
+        printOptions();
+
         while (running) {
-            printOptions();
             System.out.print("> ");
 
             String command = parser.readCommand();
@@ -140,29 +141,46 @@ public class Cli {
     }
 
     private void invoice(String[] parts) {
+        if (parts.length != 2) {
+            formatter.error("Usage: INVOICE <bookingId>");
+            return;
+        }
         try {
             String bookingId = parts[1];
             Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
                     new IllegalArgumentException("Booking not found!"));
             Invoice invoice = billingService.toInvoice(booking);
-            formatter.ok("Success! You generated invoice: " + invoice.getInvoiceNumber());
+            formatter.ok("You generated invoice: " + invoice.getInvoiceNumber());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            formatter.error(e.getMessage());
         }
     }
 
     private void pay(String[] parts) {
+        if (parts.length != 4) {
+            formatter.error("Usage: PAY <bookingId> CARD <last4>");
+            return;
+        }
         try {
             String bookingId = parts[1];
-            String last4 = parts[2];
+            String paymentType = parts[2];
+            String last4 = parts[3];
+            if (!paymentType.equalsIgnoreCase("CARD")) {
+                formatter.error("Only Card payments are supported!");
+                return;
+            }
             Payment payment = paymentService.pay(bookingId, last4);
             formatter.ok("Payment successful: " + payment.getPaymentId());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            formatter.error(e.getMessage());
         }
     }
 
     private void setPricing(String[] parts) {
+        if (parts.length != 2) {
+            formatter.error("Usage: SET_PRICING STANDARD|HAPPY_HOURS");
+            return;
+        }
         try {
             if (parts[1].equalsIgnoreCase("STANDARD")) {
                 bookingService.setPricingPolicy(new StandardPricing());
@@ -174,7 +192,7 @@ public class Cli {
                 formatter.error("Unknown pricing policy");
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            formatter.error(e.getMessage());
         }
     }
 
@@ -191,22 +209,30 @@ public class Cli {
     }
 
     private void cancel(String[] parts) {
+        if (parts.length != 2) {
+            formatter.error("Usage: CANCEL <bookingId>");
+            return;
+        }
         try {
             String bookingId = parts[1];
             bookingService.cancel(bookingId);
-            formatter.ok("Success! You confirmed booking: " + bookingId);
+            formatter.ok("You confirmed booking: " + bookingId);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            formatter.error(e.getMessage());
         }
     }
 
     private void confirm(String[] parts) {
+        if (parts.length != 2) {
+            formatter.error("Usage: CONFIRM <bookingId>");
+            return;
+        }
         try {
             String bookingId = parts[1];
             bookingService.confirm(bookingId);
-            formatter.ok("Success! You confirmed booking: " + bookingId);
+            formatter.ok("You confirmed booking: " + bookingId);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            formatter.error(e.getMessage());
         }
     }
 
@@ -222,7 +248,7 @@ public class Cli {
                     new IllegalArgumentException("Resource not found!"));
             Booking booking = new Booking(user, resource, start, end);
             bookingRepository.add(booking);
-            formatter.ok("Success! You added booking: " + booking.getId() + ", status: " + booking.getStatus());
+            formatter.ok("You added booking: " + booking.getId() + ", status: " + booking.getStatus());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -231,7 +257,7 @@ public class Cli {
     private void listResources() {
         try {
             for (Resource resource : resourceRepository.findAll()) {
-                System.out.println(resource);
+                System.out.println(resource.describe());
             }
             formatter.ok("Resources listed");
         } catch (Exception e) {
@@ -240,6 +266,10 @@ public class Cli {
     }
 
     private void addDevice(String[] parts) {
+        if (parts.length != 4) {
+            formatter.error("Usage: ADD_DEVICE <name> <quantity> <hourlyRate>");
+            return;
+        }
         try {
             String name = parts[1];
             int quantity = Integer.parseInt(parts[2]);
@@ -247,19 +277,23 @@ public class Cli {
             if (parts.length == 3) {
                 Device device = new Device(name, quantity, customHourlyRate);
                 resourceRepository.add(device);
-                formatter.ok("Success! You added: " + device.describe());
+                formatter.ok("You added: " + device.describe());
             }
             if (parts.length == 4) {
                 Device device = new Device(name, quantity, customHourlyRate);
                 resourceRepository.add(device);
-                formatter.ok("Success! You added: " + device.describe());
+                formatter.ok("You added: " + device.describe());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            formatter.error(e.getMessage());
         }
     }
 
     private void addDesk(String[] parts) {
+        if (parts.length != 4) {
+            formatter.error("Usage: ADD_DESK <name> <hot|fixed> <hourlyRate>");
+            return;
+        }
         try {
             String name = parts[1];
             DeskType type = DeskType.valueOf(parts[2].toUpperCase());
@@ -267,19 +301,23 @@ public class Cli {
             if (parts.length == 3) {
                 Desk desk = new Desk(name, type);
                 resourceRepository.add(desk);
-                formatter.ok("Success! You added: " + desk.describe());
+                formatter.ok("You added: " + desk.describe());
             }
             if (parts.length == 4) {
                 Desk desk = new Desk(name, type, customHourlyRate);
                 resourceRepository.add(desk);
-                formatter.ok("Success! You added: " + desk.describe());
+                formatter.ok("You added: " + desk.describe());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            formatter.error(e.getMessage());
         }
     }
 
     private void addRoom(String[] parts) {
+        if (parts.length < 4) {
+            formatter.error("Usage: ADD_ROOM <name> <seats> <hourlyRate>");
+            return;
+        }
         try {
             String name = parts[1];
             int seats = Integer.parseInt(parts[2]);
@@ -290,7 +328,7 @@ public class Cli {
             }
             Room room = new Room(name, hourlyRate, seats, equipment);
             resourceRepository.add(room);
-            formatter.ok("Success! You added room: " + room.describe());
+            formatter.ok("You added room: " + room.describe());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -308,6 +346,10 @@ public class Cli {
     }
 
     private void addUser(String[] parts) {
+        if (parts.length < 2) {
+            formatter.error("Usage: ADD_USER INDIVIDUAL|COMPANY ...");
+            return;
+        }
         try {
             if (parts[1].equalsIgnoreCase("INDIVIDUAL")) {
                 String email = parts[2];
@@ -321,7 +363,7 @@ public class Cli {
                     user = new IndividualUser(email, name, phone);
                 }
                 userRepository.add(user);
-                formatter.ok("Success! You added new individual user: " + user);
+                formatter.ok("You added new individual user: " + user);
             } else if (parts[1].equalsIgnoreCase("COMPANY")) {
                 String email = parts[2];
                 String name = parts[3].replace("_", " ");
@@ -330,12 +372,12 @@ public class Cli {
                 String taxId = parts[6];
                 CompanyUser companyUser = new CompanyUser(email, name, phone, companyName, taxId);
                 userRepository.add(companyUser);
-                formatter.ok("Success! You added new company user: " + companyUser);
+                formatter.ok("You added new company user: " + companyUser);
             } else {
                 System.out.println("Unknown user type");
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            formatter.error(e.getMessage());
         }
     }
 }
