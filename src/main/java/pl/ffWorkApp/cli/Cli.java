@@ -287,16 +287,9 @@ public class Cli {
             String name = parts[1].replace("\"", "");
             int quantity = Integer.parseInt(parts[2]);
             Money customHourlyRate = Money.of(parts[3]);
-            if (parts.length == 3) {
-                Device device = new Device(name, quantity, customHourlyRate);
-                resourceRepository.add(device);
-                formatter.ok("You added: " + device.describe());
-            }
-            if (parts.length == 4) {
-                Device device = new Device(name, quantity, customHourlyRate);
-                resourceRepository.add(device);
-                formatter.ok("You added: " + device.describe());
-            }
+            Device device = new Device(name, quantity, customHourlyRate);
+            resourceRepository.add(device);
+            formatter.ok("You added: " + device.describe());
         } catch (Exception e) {
             formatter.error(e.getMessage());
         }
@@ -311,16 +304,9 @@ public class Cli {
             String name = parts[1].replace("\"", "");
             DeskType type = DeskType.valueOf(parts[2].toUpperCase());
             Money customHourlyRate = Money.of(parts[3]);
-            if (parts.length == 3) {
-                Desk desk = new Desk(name, type);
-                resourceRepository.add(desk);
-                formatter.ok("You added: " + desk.describe());
-            }
-            if (parts.length == 4) {
-                Desk desk = new Desk(name, type, customHourlyRate);
-                resourceRepository.add(desk);
-                formatter.ok("You added: " + desk.describe());
-            }
+            Desk desk = new Desk(name, type, customHourlyRate);
+            resourceRepository.add(desk);
+            formatter.ok("You added: " + desk.describe());
         } catch (Exception e) {
             formatter.error(e.getMessage());
         }
