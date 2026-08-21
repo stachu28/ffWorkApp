@@ -63,20 +63,26 @@ public class Cli {
                 
                 === ffWork ===
                 Available commands:
-                
-                ADD_USER
+                ADD_USER INDIVIDUAL <email> <fullName> <phone> [studentId]
+                ADD_USER COMPANY <email> <companyName> <nip>
                 LIST_USERS
-                ADD_ROOM
-                ADD_DESK
-                ADD_DEVICE
+                
+                ADD_ROOM <name> <seats> <hourlyRate>
+                ADD_DESK <name> <hot|fixed> <hourlyRate>
+                ADD_DEVICE <name> <quantity> <hourlyRate>
                 LIST_RESOURCES
-                BOOK
-                CONFIRM
-                CANCEL
+                
+                BOOK <userEmail> <resourceName> <startIso> <endIso>
+                BOOK <userEmail> <resourceName> <startIso> <durationMinutes>
+                CONFIRM <bookingId>
+                CANCEL <bookingId>
                 LIST_BOOKINGS
-                SET_PRICING
-                PAY
-                INVOICE
+                
+                SET_PRICING STANDARD|HAPPY_HOURS
+                
+                PAY <bookingId> CARD <last4>
+                INVOICE <bookingId>
+                
                 HELP
                 QUIT
                 """);
@@ -108,6 +114,8 @@ public class Cli {
         System.out.println("""
                 
                 === ffWork CLI HELP ===
+                
+                In order to run a program, type one of the following commands into terminal:
                 
                 USERS:
                 ADD_USER INDIVIDUAL <email> <fullName> <phone> [studentId]
