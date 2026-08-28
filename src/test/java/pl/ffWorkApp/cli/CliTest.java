@@ -1,4 +1,4 @@
-package main.java.pl.ffWorkApp;
+package test.java.pl.ffWorkApp.cli;
 
 import main.java.pl.ffWorkApp.cli.Cli;
 import main.java.pl.ffWorkApp.cli.CliFormatter;
@@ -16,7 +16,7 @@ import main.java.pl.ffWorkApp.service.PaymentService;
 
 import java.util.Scanner;
 
-public class Main {
+public class CliTest {
 
     public static void main(String[] args) {
 

@@ -3,14 +3,12 @@ package main.java.pl.ffWorkApp.domain;
 abstract public class User {
     String email;
     String displayName;
-    String phoneNumber;
     long userID;
     private static long nextId = 1;
 
-    public User(String email, String displayName, String phoneNumber) {
+    public User(String email, String displayName) {
         this.email = email;
         this.displayName = displayName;
-        this.phoneNumber = phoneNumber;
         this.userID = nextId++;
     }
 
@@ -25,23 +23,6 @@ abstract public class User {
             throw new IllegalArgumentException("Email Incorrect!");
         }
     }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public long getUserID() {
         return userID;
     }

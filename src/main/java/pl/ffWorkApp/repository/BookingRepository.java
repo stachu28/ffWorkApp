@@ -1,0 +1,20 @@
+package main.java.pl.ffWorkApp.repository;
+
+import main.java.pl.ffWorkApp.domain.Booking;
+import main.java.pl.ffWorkApp.domain.Resource;
+import main.java.pl.ffWorkApp.domain.User;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface BookingRepository {
+    void add(Booking b);
+
+    Optional<Booking> findById(String id);
+
+    List<Booking> findAll();
+
+    List<Booking> findByResource(Resource r);
+
+    List<Booking> findByUser(User u);
+}

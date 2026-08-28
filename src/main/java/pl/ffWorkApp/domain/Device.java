@@ -3,14 +3,14 @@ package main.java.pl.ffWorkApp.domain;
 import main.java.pl.ffWorkApp.money.Money;
 
 public class Device extends Resource {
-    private int quantity;
+    private final int quantity;
 
     public Device(String name, int quantity) {
         super(name);
         this.quantity = quantity;
     }
 
-    public Device(String name, Money customHourlyRate, int quantity) {
+    public Device(String name, int quantity, Money customHourlyRate) {
         super(name, customHourlyRate);
         this.quantity = quantity;
     }
