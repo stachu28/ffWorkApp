@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Money {
     private final BigDecimal amount;
-    private final String currency = "PLN";
+    private static final String currency = "PLN";
 
     public Money(BigDecimal amount) {
         this.amount = amount.setScale(2, RoundingMode.HALF_UP);

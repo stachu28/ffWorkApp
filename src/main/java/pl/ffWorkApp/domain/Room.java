@@ -31,4 +31,9 @@ public class Room extends Resource {
                 ", seat number: " + seats +
                 ", equipment: " + equipment;
     }
+
+    @Override
+    public String toString() {
+        return describe();
+    }
 }
